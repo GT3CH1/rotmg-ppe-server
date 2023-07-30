@@ -28,13 +28,13 @@ namespace rotmg_ppe_server.models;
 [PrimaryKey("ItemId")]
 public class Item
 {
-    [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty(PropertyName = "id")]
     public int ItemId { get; set; }
 
     public virtual List<Player>? Players { get; }
 
+    [Key]
     [JsonProperty(PropertyName = "name")] public string Name { get; set; }
 
     [JsonProperty(PropertyName = "worth")] public int? Worth { get; set; } = 0;

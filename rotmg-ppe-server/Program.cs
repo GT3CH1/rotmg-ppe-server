@@ -34,7 +34,7 @@ app.MapControllerRoute(
 app.MapRazorPages();
 
 // print out the values for each RotMGClass enum
-foreach (var value in Enum.GetValues<RotMGClass>())
+foreach (var value in Enum.GetValues<ItemCategory>())
 {
     Console.WriteLine($"'{value}': {(int)value},");
 }
