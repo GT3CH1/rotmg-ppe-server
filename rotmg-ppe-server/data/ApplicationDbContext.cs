@@ -27,6 +27,25 @@ public class ApplicationDbContext : DbContext
     {
     }
 
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        modelBuilder.Entity<Player>()
+            .HasMany(p => p.Items)
+            .WithMany(i => i.Players);
+        base.OnModelCreating(modelBuilder);
+    }
+
+    public async Task InitializeDatabase()
+    {
+        // check if database exists, if not, create it
+        await Database.EnsureCreatedAsync();
+        // check for pending migrations
+        if (Database.GetPendingMigrations().Any())
+            await Database.MigrateAsync();
+    }
+
     public DbSet<Player> Players { get; set; }
+
     public DbSet<Item> Items { get; set; }
+    // public DbSet<PlayerItemList> PlayerItemLists { get; set; }
 }

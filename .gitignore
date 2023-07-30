@@ -132,6 +132,7 @@ $RECYCLE.BIN/
 
 _NCrunch*
 
-app.db-shm
-app.db-wal
+*.db-shm
+*.db-wal
 **/.idea
+*.db

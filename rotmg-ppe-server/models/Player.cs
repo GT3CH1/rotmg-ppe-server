@@ -18,22 +18,44 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace rotmg_ppe_server.models;
 
+[PrimaryKey("PlayerId")]
+[JsonObject(MemberSerialization.OptIn)]
 public class Player
 {
     [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public int Id { get; set; }
-    public string Name { get; set; }
-    List<Item> Items { get; set; }
-    
-    public Player(string name)
+    [JsonProperty(PropertyName = "id")]
+    public int PlayerId { get; set; }
+
+    [JsonProperty(PropertyName = "name")] public string? Name { get; set; } = null!;
+
+    [JsonProperty(PropertyName = "dead")] public bool? IsDead { get; set; } = false;
+    [JsonProperty(PropertyName = "upe")] public bool? IsUpe { get; set; } = null!;
+
+    [JsonProperty(PropertyName = "items")] public virtual List<Item>? Items { get; set; }
+
+    [JsonProperty(PropertyName = "worth")] public int? Worth => GetWorth();
+
+    [JsonProperty(PropertyName = "class")] public RotMGClass? CharacterClass { get; set; } = null!;
+
+    public Player()
     {
-        Name = name;
-        Items = new List<Item>();
     }
 
-    public int GetWorth() => Items.Sum(x => x.Worth);
+    public bool Dead() => IsDead ?? false;
+
+    public int GetWorth()
+    {
+        var scalar = 1.0f;
+        if (Items == null || Items.Count == 0)
+            return 0;
+        if (IsUpe.GetValueOrDefault())
+            scalar = 1.5f;
+        return (int)(Items.Sum(i => i.Worth) * scalar);
+    }
 }

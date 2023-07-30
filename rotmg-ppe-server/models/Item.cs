@@ -18,21 +18,39 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace rotmg_ppe_server.models;
 
 [JsonObject(MemberSerialization.OptIn)]
+[PrimaryKey("ItemId")]
 public class Item
 {
     [Key]
-    // auto incrementing id
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty(PropertyName = "id")]
-    public int? Id { get; set; } = null;
-    [JsonProperty(PropertyName = "name")]
-    public string Name { get; set; }
-    [JsonProperty(PropertyName = "worth")]
-    public int Worth { get; set; }
-    
+    public int ItemId { get; set; }
+
+    public virtual List<Player>? Players { get; }
+
+    [JsonProperty(PropertyName = "name")] public string Name { get; set; }
+
+    [JsonProperty(PropertyName = "worth")] public int? Worth { get; set; } = 0;
+    [JsonProperty(PropertyName = "soulbound")] public bool? Soulbound { get; set; } = false;
+
+    public Item(string name)
+    {
+        Name = name;
+    }
+
+    public Item(string name, int worth)
+    {
+        Name = name;
+        Worth = worth;
+    }
+
+    public Item()
+    {
+    }
 }
