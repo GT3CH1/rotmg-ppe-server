@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using rotmg_ppe_server.data;
+using rotmg_ppe_server.models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,5 +32,12 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 app.MapRazorPages();
+
+// print out the values for each RotMGClass enum
+foreach (var value in Enum.GetValues<RotMGClass>())
+{
+    Console.WriteLine($"{value} = {(int)value}");
+    Console.WriteLine(Player.ItemValidForClass(ItemCategory.Dagger, value));
+}
 
 app.Run();

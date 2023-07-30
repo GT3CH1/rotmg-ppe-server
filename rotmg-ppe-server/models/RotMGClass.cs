@@ -19,65 +19,60 @@
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
-
+using static rotmg_ppe_server.models.ItemCategory;
 namespace rotmg_ppe_server.models;
 
-public enum RotMGClass
+public enum RotMGClass: int
 {
-    
-    [EnumMember(Value="rouge")]
     [JsonProperty(PropertyName = "rouge")] 
-    Rouge,
-    [EnumMember(Value="archer")]
+    Rouge = Dagger | Cloak | LeatherArmor,
+
     [JsonProperty(PropertyName = "archer")]
-    Archer,
-    [EnumMember(Value="wizard")]
+    Archer = Bow | Quiver | LeatherArmor,
+
     [JsonProperty(PropertyName = "wizard")]
-    Wizard,
-    [EnumMember(Value="priest")]
+    Wizard = Staff | Spell | Robe,
+
     [JsonProperty(PropertyName = "priest")]
-    Priest,
-    [EnumMember(Value="warrior")]
+    Priest = Wand | Tome | Robe,
+
     [JsonProperty(PropertyName = "warrior")]
-    Warrior,
-    [EnumMember(Value="knight")]
+    Warrior = Sword | Helm | HeavyArmor,
+
     [JsonProperty(PropertyName = "knight")]
-    Knight,
-    [EnumMember(Value="paladin")]
+    Knight = Sword | HeavyArmor | Shield,
+
     [JsonProperty(PropertyName = "paladin")]
-    Paladin,
-    [EnumMember(Value="assassin")]
+    Paladin = Sword | HeavyArmor | Seal,
+
     [JsonProperty(PropertyName = "assassin")]
-    Assassin,
-    [EnumMember(Value="necromancer")]
+    Assassin = Dagger | LeatherArmor | Poison,
+
     [JsonProperty(PropertyName = "necromancer")]
-    Necromancer,
-    [EnumMember(Value="huntress")]
+    Necromancer = Staff | Robe | Skull,
+
     [JsonProperty(PropertyName = "huntress")]
-    Huntress,
-    [EnumMember(Value="mystic")]
+    Huntress = Bow | Trap | LeatherArmor,
+
     [JsonProperty(PropertyName = "mystic")]
-    Mystic,
-    [EnumMember(Value="trickster")]
+    Mystic = Staff | Orb | Robe,
+
     [JsonProperty(PropertyName = "trickster")]
-    Trickster,
-    [EnumMember(Value="sorcerer")]
+    Trickster = Dagger | Prism | LeatherArmor,
+
     [JsonProperty(PropertyName = "sorcerer")]
-    Sorcerer,
-    [EnumMember(Value="ninja")]
-    [JsonProperty(PropertyName = "ninja")] 
-    Ninja,
-    [EnumMember(Value="samurai")]
+    Sorcerer = Wand | Scepter | Robe,
+
+    [JsonProperty(PropertyName = "ninja")] Ninja = Katana | Star | LeatherArmor,
+
     [JsonProperty(PropertyName = "samurai")]
-    Samurai,
-    [EnumMember(Value="bard")]
-    [JsonProperty(PropertyName = "bard")]
-    Bard,
-    [EnumMember(Value="summoner")]
+    Samurai = Katana | Wakizashi | HeavyArmor,
+
+    [JsonProperty(PropertyName = "bard")] Bard = Bow | Lute | Robe,
+
     [JsonProperty(PropertyName = "summoner")]
-    Summoner,
-    [EnumMember(Value="kensei")]
+    Summoner = Wand | Mace | Robe,
+
     [JsonProperty(PropertyName = "kensei")]
-    Kensei
-    
+    Kensei = Katana | Sheath | HeavyArmor
 }

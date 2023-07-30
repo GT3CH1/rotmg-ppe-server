@@ -42,6 +42,7 @@ public class Player
     [JsonProperty(PropertyName = "worth")] public int? Worth => GetWorth();
 
     [JsonProperty(PropertyName = "class")] public RotMGClass? CharacterClass { get; set; } = null!;
+    public int GetClass() => (int)CharacterClass;
 
     public Player()
     {
@@ -57,5 +58,20 @@ public class Player
         if (IsUpe.GetValueOrDefault())
             scalar = 1.5f;
         return (int)(Items.Sum(i => i.Worth) * scalar);
+    }
+    
+    public bool ItemValidForClass(Item i)
+    {
+        return ItemValidForClass(i, CharacterClass.GetValueOrDefault());
+    }
+
+    public static bool ItemValidForClass(Item i, RotMGClass c)
+    {
+        return (i.ItemType & (int)c) != 1;
+    }
+    
+    public static bool ItemValidForClass(ItemCategory i, RotMGClass c)
+    {
+        return ((int)i & (int)c) != 0;
     }
 }

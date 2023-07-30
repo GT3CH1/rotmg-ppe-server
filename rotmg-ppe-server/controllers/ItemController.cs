@@ -55,7 +55,6 @@ namespace rotmg_ppe_server.controllers
             {
                 foundItem.Name = item.Name;
                 foundItem.Worth = item.Worth;
-                foundItem.Soulbound = item.Soulbound;
                 _context.Items.Update(foundItem);
                 _context.SaveChanges();
             }

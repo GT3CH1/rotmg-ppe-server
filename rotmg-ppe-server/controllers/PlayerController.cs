@@ -95,7 +95,7 @@ namespace rotmg_ppe_server.controllers
                     var lookedUpItem = _context.Items.Where(i => i.Name == item.Name).FirstOrDefault();
                     if (lookedUpItem == null)
                         continue;
-                    if (player.IsUpe.GetValueOrDefault() && !lookedUpItem.Soulbound.GetValueOrDefault())
+                    if (player.IsUpe.GetValueOrDefault() && !lookedUpItem.Soulbound())
                         continue;
                     player.Items.Add(lookedUpItem);
                 }

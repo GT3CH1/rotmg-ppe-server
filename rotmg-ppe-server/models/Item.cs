@@ -37,7 +37,18 @@ public class Item
     [JsonProperty(PropertyName = "name")] public string Name { get; set; }
 
     [JsonProperty(PropertyName = "worth")] public int? Worth { get; set; } = 0;
-    [JsonProperty(PropertyName = "soulbound")] public bool? Soulbound { get; set; } = false;
+
+
+    [JsonProperty(PropertyName = "itemType")]
+    public int ItemType { get; set; } = 0;
+
+    public bool Soulbound() => (ItemType & (int)ItemCategory.UT) != 0;
+
+    public bool ValidForClass(RotMGClass rotMgClass)
+    {
+        return (ItemType | (int)rotMgClass) != 0;
+    }
+
 
     public Item(string name)
     {
@@ -52,5 +63,34 @@ public class Item
 
     public Item()
     {
+    }
+
+    public void SetCategory(ItemCategory category)
+    {
+        ItemType = ItemType | (int)category;
+    }
+
+    public bool IsWeapon()
+    {
+        return (ItemType >> 5 | 0x1F) != 0;
+    }
+
+    public bool IsRing() => IsOfType(ItemCategory.Ring);
+    public bool isUT() => IsOfType(ItemCategory.UT);
+
+    public bool IsOfType(ItemCategory category)
+    {
+        return (ItemType & (int)category) != 0;
+    }
+
+    public bool IsArmor()
+    {
+        // get bits 24-26
+        return (ItemType >> 24 | 0x7) != 0;
+    }
+
+    public bool IsAbility()
+    {
+        return (ItemType >> 6 & 0x3FFFF) != 0;
     }
 }
