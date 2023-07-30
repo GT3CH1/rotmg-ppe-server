@@ -39,8 +39,9 @@ namespace rotmg_ppe_server.controllers
         [HttpGet("TopLivingPlayers")]
         public List<Player> GetTopLivingPlayers()
         {
-            var players = _context.Players.Include(p => p.Items).Where(p => !p.IsDead.Value)
-                .OrderByDescending(p => p.Worth).Take(10).ToList();
+            var deadPlayers = _context.Players.Include(p => p.Items).Where(p => !p.IsDead.Value).ToList();
+            // sort dead players by worth
+            var players = deadPlayers.OrderByDescending(p => p.GetWorth()).Take(10).ToList();
             return players;
         }
 
