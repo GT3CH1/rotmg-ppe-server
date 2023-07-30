@@ -42,6 +42,12 @@ namespace rotmg_ppe_server.controllers
         [HttpPost]
         public void Post([FromBody] Item item)
         {
+            // check if item name is unique
+            var foundItem = FindItemByName(item.Name);
+            if (foundItem != null)
+            {
+                return;
+            }
             _context.Items.Add(item);
             _context.SaveChanges();
         }
