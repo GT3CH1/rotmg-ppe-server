@@ -36,8 +36,7 @@ app.MapRazorPages();
 // print out the values for each RotMGClass enum
 foreach (var value in Enum.GetValues<RotMGClass>())
 {
-    Console.WriteLine($"{value} = {(int)value}");
-    Console.WriteLine(Player.ItemValidForClass(ItemCategory.Dagger, value));
+    Console.WriteLine($"'{value}': {(int)value},");
 }
 
 app.Run();

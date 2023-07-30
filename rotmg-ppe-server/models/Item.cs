@@ -18,6 +18,7 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Runtime.Serialization;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -75,7 +76,7 @@ public class Item
         return (ItemType >> 5 | 0x1F) != 0;
     }
 
-    public bool IsRing() => IsOfType(ItemCategory.Ring);
+    public bool IsRing() => IsOfType(ItemCategory.Ring) || (IsOfType(ItemCategory.Ring) && IsOfType(ItemCategory.UT));
     public bool isUT() => IsOfType(ItemCategory.UT);
 
     public bool IsOfType(ItemCategory category)

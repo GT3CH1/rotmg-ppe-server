@@ -25,7 +25,7 @@ namespace rotmg_ppe_server.controllers
         [HttpGet]
         public List<Player> Get()
         {
-            var players = _context.Players.Include(p => p.Items).ToList();
+            var players = _context.Players.Include(p => p.Items).Where(p => !p.IsDead.Value).ToList();
             return players;
         }
 
@@ -95,9 +95,10 @@ namespace rotmg_ppe_server.controllers
                     var lookedUpItem = _context.Items.Where(i => i.Name == item.Name).FirstOrDefault();
                     if (lookedUpItem == null)
                         continue;
-                    if (player.IsUpe.GetValueOrDefault() && !lookedUpItem.Soulbound())
+                    if (player.IsUpe.Value && !lookedUpItem.Soulbound())
                         continue;
-                    player.Items.Add(lookedUpItem);
+                    if (player.ItemValidForClass(lookedUpItem))
+                        player.Items.Add(lookedUpItem);
                 }
             }
 

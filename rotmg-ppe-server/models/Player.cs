@@ -67,7 +67,7 @@ public class Player
 
     public static bool ItemValidForClass(Item i, RotMGClass c)
     {
-        return (i.ItemType & (int)c) != 1;
+        return (i.ItemType & (int)c) != 0;
     }
     
     public static bool ItemValidForClass(ItemCategory i, RotMGClass c)

@@ -25,54 +25,54 @@ namespace rotmg_ppe_server.models;
 public enum RotMGClass: int
 {
     [JsonProperty(PropertyName = "rouge")] 
-    Rouge = Dagger | Cloak | LeatherArmor,
+    Rouge = Dagger | Cloak | LeatherArmor | Ring,
 
     [JsonProperty(PropertyName = "archer")]
-    Archer = Bow | Quiver | LeatherArmor,
+    Archer = Bow | Quiver | LeatherArmor | Ring,
 
     [JsonProperty(PropertyName = "wizard")]
-    Wizard = Staff | Spell | Robe,
+    Wizard = Staff | Spell | Robe | Ring,
 
     [JsonProperty(PropertyName = "priest")]
-    Priest = Wand | Tome | Robe,
+    Priest = Wand | Tome | Robe | Ring,
 
     [JsonProperty(PropertyName = "warrior")]
-    Warrior = Sword | Helm | HeavyArmor,
+    Warrior = Sword | Helm | HeavyArmor | Ring,
 
     [JsonProperty(PropertyName = "knight")]
-    Knight = Sword | HeavyArmor | Shield,
+    Knight = Sword | HeavyArmor | Shield | Ring,
 
     [JsonProperty(PropertyName = "paladin")]
-    Paladin = Sword | HeavyArmor | Seal,
+    Paladin = Sword | HeavyArmor | Seal | Ring,
 
     [JsonProperty(PropertyName = "assassin")]
-    Assassin = Dagger | LeatherArmor | Poison,
+    Assassin = Dagger | LeatherArmor | Poison | Ring,
 
     [JsonProperty(PropertyName = "necromancer")]
-    Necromancer = Staff | Robe | Skull,
+    Necromancer = Staff | Robe | Skull | Ring,
 
     [JsonProperty(PropertyName = "huntress")]
-    Huntress = Bow | Trap | LeatherArmor,
+    Huntress = Bow | Trap | LeatherArmor | Ring,
 
     [JsonProperty(PropertyName = "mystic")]
-    Mystic = Staff | Orb | Robe,
+    Mystic = Staff | Orb | Robe | Ring,
 
     [JsonProperty(PropertyName = "trickster")]
-    Trickster = Dagger | Prism | LeatherArmor,
+    Trickster = Dagger | Prism | LeatherArmor | Ring,
 
     [JsonProperty(PropertyName = "sorcerer")]
-    Sorcerer = Wand | Scepter | Robe,
+    Sorcerer = Wand | Scepter | Robe | Ring,
 
-    [JsonProperty(PropertyName = "ninja")] Ninja = Katana | Star | LeatherArmor,
+    [JsonProperty(PropertyName = "ninja")] Ninja = Katana | Star | LeatherArmor | Ring,
 
     [JsonProperty(PropertyName = "samurai")]
-    Samurai = Katana | Wakizashi | HeavyArmor,
+    Samurai = Katana | Wakizashi | HeavyArmor | Ring,
 
-    [JsonProperty(PropertyName = "bard")] Bard = Bow | Lute | Robe,
+    [JsonProperty(PropertyName = "bard")] Bard = Bow | Lute | Robe | Ring,
 
     [JsonProperty(PropertyName = "summoner")]
-    Summoner = Wand | Mace | Robe,
+    Summoner = Wand | Mace | Robe | Ring,
 
     [JsonProperty(PropertyName = "kensei")]
-    Kensei = Katana | Sheath | HeavyArmor
+    Kensei = Katana | Sheath | HeavyArmor | Ring
 }
