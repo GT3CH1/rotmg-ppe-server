@@ -48,6 +48,7 @@ namespace rotmg_ppe_server.controllers
             {
                 return;
             }
+
             _context.Items.Add(item);
             _context.SaveChanges();
         }
@@ -57,12 +58,11 @@ namespace rotmg_ppe_server.controllers
         public void Put(string name, [FromBody] Item item)
         {
             var foundItem = FindItemByName(name);
-            if (foundItem != null && ItemIsValid(item))
-            {
-                foundItem.Worth = item.Worth;
-                _context.Items.Update(foundItem);
-                _context.SaveChanges();
-            }
+            if (foundItem == null)
+                return;
+            foundItem.Worth = item.Worth;
+            _context.Items.Update(foundItem);
+            _context.SaveChanges();
         }
 
         private bool ItemIsValid(Item i) => i.Name != null && i.Worth != null;
