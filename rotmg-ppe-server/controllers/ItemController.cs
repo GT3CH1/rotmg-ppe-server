@@ -59,7 +59,6 @@ namespace rotmg_ppe_server.controllers
             var foundItem = FindItemByName(name);
             if (foundItem != null && ItemIsValid(item))
             {
-                foundItem.Name = item.Name;
                 foundItem.Worth = item.Worth;
                 _context.Items.Update(foundItem);
                 _context.SaveChanges();
