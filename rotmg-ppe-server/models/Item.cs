@@ -35,7 +35,7 @@ public class Item
     public virtual List<Player>? Players { get; }
 
     [Key]
-    [JsonProperty(PropertyName = "name")] public string Name { get; set; }
+    [JsonProperty(PropertyName = "name")] public string? Name { get; set; }
 
     [JsonProperty(PropertyName = "worth")] public int? Worth { get; set; } = 0;
 
