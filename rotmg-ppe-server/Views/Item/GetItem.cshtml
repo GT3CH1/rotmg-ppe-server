@@ -1,0 +1,31 @@
+﻿@using rotmg_ppe_server.models
+@model rotmg_ppe_server.models.Item
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title></title>
+</head>
+<body>
+<div>
+    @* create 29 checkboxes for each of the ItemCategory values *@
+    @{
+        foreach (var value in Enum.GetValues<ItemCategory>())
+        {
+            bool isInCategory = (Model.IsOfType(value));
+            <div>
+                <form>
+                    <input type="checkbox" id="@value" checked="@isInCategory"/>
+                    <label for="@value">@value</label>
+                </form>
+            </div>
+        }
+    }
+</div>
+</body>
+</html>

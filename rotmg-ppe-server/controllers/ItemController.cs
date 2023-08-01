@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.Elfie.Model.Map;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using rotmg_ppe_server.data;
 using rotmg_ppe_server.models;
@@ -13,7 +13,7 @@ namespace rotmg_ppe_server.controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ItemController : ControllerBase
+    public class ItemController : Controller
     {
         private ApplicationDbContext _context;
 
@@ -24,13 +24,21 @@ namespace rotmg_ppe_server.controllers
 
         // GET: api/Item
         [HttpGet]
-        public IEnumerable<Item> Get()
+        public IEnumerable<Item> Index()
         {
             return _context.Items.ToList();
         }
 
-        // GET: api/Item/ring-of-unbound-health
         [HttpGet("{name}")]
+        public IActionResult GetItem(string name)
+        {
+            var item = FindItemByName(name);
+            return View(item);
+        }
+
+
+        // GET: api/Item/ring-of-unbound-health
+        [HttpGet("{name}/info")]
         public string Get(string name)
         {
             var item = FindItemByName(name);
