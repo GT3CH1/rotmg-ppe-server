@@ -1,12 +1,53 @@
 ﻿@model List<rotmg_ppe_server.models.Item>
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "RotMG PPE Item List";
     Layout = "_Layout";
 }
 
-<h2>title</h2>
-@foreach (var item in Model)
-{
-    <a href="/api/Item/@item.Name">@item.Name</a><br/>
+<h2>@ViewBag.Title</h2>
+<br/>
+<br/>
+<div class="columns is-centered">
+    <div class="column is-9">
+        <table id="itemTable">
+            <thead>
+            <tr>
+                <td>
+                    Item ID
+                </td>
+                <td>
+                    Item Name
+                </td>
+                <td>
+                    Item Worth
+                </td>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.ItemId
+                    </td>
+                    <td>
+                        <a href="/api/Item/@item.Name" target="_blank">@item.Name</a>
+                    </td>
+                    <td>
+                        @item.Worth
+                    </td>
+                </tr>
+            }
+        </table>
+    </div>
+</div>
+
+@section Styles {
+    <link href="//cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+}
+
+@section Scripts {
+    <script src="//cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="/js/index.js"></script>
 }

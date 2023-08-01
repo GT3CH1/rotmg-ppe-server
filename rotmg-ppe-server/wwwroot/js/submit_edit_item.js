@@ -20,14 +20,14 @@
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
-            alert("Item updated successfully!");
-            window.location.href = "/api/Item";
+            if (data["success"])
+                window.close()
         },
         error: function (data) {
             alert("Error updating item!");
         }
     });
-}
+});
     
 
 

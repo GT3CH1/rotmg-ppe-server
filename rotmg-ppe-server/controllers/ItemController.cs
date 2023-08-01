@@ -34,6 +34,11 @@ namespace rotmg_ppe_server.controllers
         public IActionResult GetItem(string name)
         {
             var item = FindItemByName(name);
+            if (item == null)
+            {
+                return NotFound(new { success = false, message = "Item not found" });
+            }
+
             return View(item);
         }
 
@@ -64,14 +69,18 @@ namespace rotmg_ppe_server.controllers
 
         // PUT: api/Item/5
         [HttpPut("{name}")]
-        public void Put(string name, [FromBody] Item item)
+        public IActionResult Put(string name, [FromBody] Item item)
         {
             var foundItem = FindItemByName(name);
             if (foundItem == null)
-                return;
+                return NotFound(new { success = false });
             foundItem.Worth = item.Worth;
+            foundItem.ItemType = item.ItemType;
+            if (item.Name != null)
+                foundItem.Name = item.Name;
             _context.Items.Update(foundItem);
             _context.SaveChanges();
+            return Ok(new { success = true });
         }
 
         private bool ItemIsValid(Item i) => i.Name != null && i.Worth != null;
