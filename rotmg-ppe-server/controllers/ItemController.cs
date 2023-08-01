@@ -24,9 +24,10 @@ namespace rotmg_ppe_server.controllers
 
         // GET: api/Item
         [HttpGet]
-        public IEnumerable<Item> Index()
+        public IActionResult Index()
         {
-            return _context.Items.ToList();
+            var list = _context.Items.ToList();
+            return View(list);
         }
 
         [HttpGet("{name}")]

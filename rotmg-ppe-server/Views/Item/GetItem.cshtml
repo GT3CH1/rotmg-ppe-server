@@ -2,7 +2,7 @@
 @model rotmg_ppe_server.models.Item
 
 @{
-    Layout = null;
+    Layout = "_Layout";
 }
 
 <!DOCTYPE html>
@@ -12,20 +12,54 @@
     <title></title>
 </head>
 <body>
-<div>
-    @* create 29 checkboxes for each of the ItemCategory values *@
-    @{
-        foreach (var value in Enum.GetValues<ItemCategory>())
-        {
-            bool isInCategory = (Model.IsOfType(value));
-            <div>
-                <form>
-                    <input type="checkbox" id="@value" checked="@isInCategory"/>
-                    <label for="@value">@value</label>
-                </form>
+<div class="columns is-8 is-centered pt-5">
+    <div class="column is-10">
+        @* create 29 checkboxes for each of the ItemCategory values *@
+        @{
+            var count = 0;
+            @foreach (var value in Enum.GetValues<ItemCategory>())
+            {
+                // every 5 checkboxes, create a new row
+                if (count % 5 == 0)
+                {
+                    @:<div class="columns">
+                }
+                var isInCategory = (Model.IsOfType(value));
+                var worth = (int)value;
+                <div class="column is-one-fifth">
+                    <input class="checkbox" type="checkbox" id="@value" checked="@isInCategory" value="@worth"/>
+                    <label class="checkbox" for="@value">
+                        @value
+                    </label>
+                </div>
+                count++;
+                if (count % 5 == 0 && count != 0)
+                {
+                    @:</div>
+                }
+            }
+            <div class="columns">
+                <div class="is-6 column">
+                    <label asp-for="Name">Name</label>
+                    <input id="itemName" type="text" class="input is-primary" value="@Model.Name" asp-for="Name"/>
+                </div>
+                <div class="is-6 column">
+                    <label asp-for="Worth">Worth</label>
+                    <input id="itemWorth" type="number" class="input is-info" value="@Model.Worth" asp-for="Worth"/>
+                </div>
+                <input id="originalName" type="text" value="@Model.Name" hidden/>
             </div>
         }
-    }
+        <button class="button is-primary" type="submit" id="submit">Submit Changes</button>
+        &nbsp;
+        <a href="/api/Item" class="button is-danger">Back</a>
+        &nbsp;
+        <a class="button is-link" target="_blank" href="https://realmeye.com/wiki/@Model.Name">Wiki</a>
+    </div>
 </div>
 </body>
-</html>
+<html>
+
+@section Scripts {
+    <script src="/js/submit_edit_item.js"></script>
+}

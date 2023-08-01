@@ -1,0 +1,12 @@
+﻿@model List<rotmg_ppe_server.models.Item>
+
+@{
+    ViewBag.Title = "title";
+    Layout = "_Layout";
+}
+
+<h2>title</h2>
+@foreach (var item in Model)
+{
+    <a href="/api/Item/@item.Name">@item.Name</a><br/>
+}
