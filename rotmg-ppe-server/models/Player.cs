@@ -52,12 +52,9 @@ public class Player
 
     public int GetWorth()
     {
-        var scalar = 1.0f;
         if (Items == null || Items.Count == 0)
             return 0;
-        if (IsUpe.GetValueOrDefault())
-            scalar = 1.5f;
-        return (int)(Items.Sum(i => i.Worth) * scalar);
+        return (int)Items.Sum(i => i.Worth);
     }
     
     public bool ItemValidForClass(Item i)
