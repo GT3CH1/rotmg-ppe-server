@@ -78,6 +78,9 @@ public class Item
 
     public bool IsRing() => IsOfType(ItemCategory.Ring) || (IsOfType(ItemCategory.Ring) && IsOfType(ItemCategory.UT));
     public bool isUT() => IsOfType(ItemCategory.UT);
+    public bool isST() => IsOfType(ItemCategory.ST);
+    
+    public bool UPEFriendly() => isUT() || isST();
 
     public bool IsOfType(ItemCategory category)
     {
