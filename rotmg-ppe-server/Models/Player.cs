@@ -56,7 +56,7 @@ public class Player
             return 0;
         return (int)Items.Sum(i => i.Worth);
     }
-    
+
     public bool ItemValidForClass(Item i)
     {
         return ItemValidForClass(i, CharacterClass.GetValueOrDefault());
@@ -66,7 +66,7 @@ public class Player
     {
         return (i.ItemType & (int)c) != 0;
     }
-    
+
     public static bool ItemValidForClass(ItemCategory i, RotMGClass c)
     {
         return ((int)i & (int)c) != 0;

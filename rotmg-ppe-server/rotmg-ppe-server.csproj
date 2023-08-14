@@ -27,6 +27,16 @@
     <ItemGroup>
       <Folder Include="controllers\" />
       <Folder Include="Migrations\" />
+      <Folder Include="wwwroot\uploads\" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Remove="wwwroot\uploads\2e680bb8-72ea-4b0a-af0f-154363b5c273.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Migrations\20230804153826_AddScanUrl.cs" />
+      <Compile Remove="Migrations\20230804153826_AddScanUrl.Designer.cs" />
     </ItemGroup>
 
 </Project>
