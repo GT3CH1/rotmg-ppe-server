@@ -22,6 +22,24 @@ namespace rotmg_ppe_server.controllers
             _context = context;
         }
 
+        [HttpGet("player/discord/{discordId}")]
+        public async Task<IActionResult> GetPlayerStatus(int discordId)
+        {
+            var pendingPlayer = _context.PendingRealmEyeUsers.FirstOrDefault(p => p.DiscordId == discordId);
+            if (pendingPlayer != null)
+            {
+                return Ok(new
+                {
+                    success = true, verified = false,
+                    message = $"Player {pendingPlayer.AccountName} has not finished verification.",
+                    verificationCode = pendingPlayer.VerificationCode, userName = pendingPlayer.AccountName
+                });
+            }
+
+
+            return Ok(new { success = false, verified = false, message = "User has not started verification." });
+        }
+
         [HttpGet("player/{playerName}")]
         public async Task<IActionResult> GetPlayerStatus(string playerName)
         {
@@ -29,6 +47,16 @@ namespace rotmg_ppe_server.controllers
             if (player == null)
             {
                 return NotFound(new { success = false, message = $"Player {playerName} not found." });
+            }
+
+            var pendingPlayer = _context.PendingRealmEyeUsers.FirstOrDefault(p => p.AccountName == player.Name);
+            if (pendingPlayer != null)
+            {
+                return Ok(new
+                {
+                    success = false, verified = false, message = $"Player {playerName} has not finished verification.",
+                    verificationCode = pendingPlayer.VerificationCode, discordId = pendingPlayer.DiscordId
+                });
             }
 
             var realmEyePlayer = _context.RealmEyeAccounts.FirstOrDefault(r => r.AccountName == player.Name);
@@ -40,7 +68,11 @@ namespace rotmg_ppe_server.controllers
                 });
             }
 
-            return Ok(new { success = true, verified = realmEyePlayer.Verified, discordId = realmEyePlayer.DiscordId });
+            return Ok(new
+            {
+                success = true, verified = realmEyePlayer.Verified, discordId = realmEyePlayer.DiscordId,
+                username = realmEyePlayer.AccountName
+            });
         }
 
         [HttpPost("player/{name}")]
