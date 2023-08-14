@@ -25,7 +25,6 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="controllers\" />
       <Folder Include="Migrations\" />
       <Folder Include="wwwroot\uploads\" />
     </ItemGroup>

@@ -17,6 +17,7 @@
 // OTHER DEALINGS IN THE SOFTWARE.
 
 using Microsoft.EntityFrameworkCore;
+using rotmg_ppe_server.controllers;
 using rotmg_ppe_server.models;
 
 namespace rotmg_ppe_server.data;
@@ -49,5 +50,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Item> Items { get; set; }
     
     public DbSet<RealmEyeAccount> RealmEyeAccounts { get; set; }
+    
+    public DbSet<PendingRealmEyeUser> PendingRealmEyeUsers { get; set; }
     // public DbSet<PlayerItemList> PlayerItemLists { get; set; }
 }
