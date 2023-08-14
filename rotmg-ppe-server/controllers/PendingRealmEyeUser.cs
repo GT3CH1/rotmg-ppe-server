@@ -18,23 +18,20 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace rotmg_ppe_server.controllers;
 
+[PrimaryKey(nameof(DiscordId), nameof(AccountName))]
 public class PendingRealmEyeUser
 {
-    [Key]
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    [JsonProperty(PropertyName = "id")]
-    public int Id { get; set; }
-    
-    [JsonProperty(PropertyName = "accountName")]
-    public string? AccountName { get; set; }
-    
-    [JsonProperty(PropertyName = "verificationCode")]
-    public string? VerificationCode { get; set; }
-    
     [JsonProperty(PropertyName = "discordId")]
     public int? DiscordId { get; set; }
+
+    [JsonProperty(PropertyName = "accountName")]
+    public string? AccountName { get; set; }
+
+    [JsonProperty(PropertyName = "verificationCode")]
+    public string? VerificationCode { get; set; }
 }

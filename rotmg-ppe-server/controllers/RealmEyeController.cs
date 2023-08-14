@@ -96,6 +96,7 @@ namespace rotmg_ppe_server.controllers
                     realmEyeUser.Verified = true;
                     realmEyeUser.DiscordId = pendingRealmEyeUser.DiscordId;
                     realmEyeUser.VerificationCode = pendingRealmEyeUser.VerificationCode;
+                    await _context.RealmEyeAccounts.AddAsync(realmEyeUser);
                     await _context.SaveChangesAsync();
                     return Ok(new { success = true, message = $"Player {name} verified." });
                 }
