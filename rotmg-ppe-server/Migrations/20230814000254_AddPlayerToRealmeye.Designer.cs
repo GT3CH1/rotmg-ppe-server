@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using rotmg_ppe_server.data;
 
@@ -10,9 +11,11 @@ using rotmg_ppe_server.data;
 namespace rotmg_ppe_server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230814000254_AddPlayerToRealmeye")]
+    partial class AddPlayerToRealmeye
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -79,31 +82,6 @@ namespace rotmg_ppe_server.Migrations
                     b.ToTable("Players");
                 });
 
-            modelBuilder.Entity("rotmg_ppe_server.models.RealmEyeAccount", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("AccountName")
-                        .HasColumnType("TEXT");
-
-                    b.Property<int?>("PlayerId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("VerificationCode")
-                        .HasColumnType("TEXT");
-
-                    b.Property<bool>("Verified")
-                        .HasColumnType("INTEGER");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PlayerId");
-
-                    b.ToTable("RealmEyeAccounts");
-                });
-
             modelBuilder.Entity("ItemPlayer", b =>
                 {
                     b.HasOne("rotmg_ppe_server.models.Item", null)
@@ -117,15 +95,6 @@ namespace rotmg_ppe_server.Migrations
                         .HasForeignKey("PlayersPlayerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("rotmg_ppe_server.models.RealmEyeAccount", b =>
-                {
-                    b.HasOne("rotmg_ppe_server.models.Player", "Player")
-                        .WithMany()
-                        .HasForeignKey("PlayerId");
-
-                    b.Navigation("Player");
                 });
 #pragma warning restore 612, 618
         }

@@ -47,5 +47,7 @@ public class ApplicationDbContext : DbContext
     public DbSet<Player> Players { get; set; }
 
     public DbSet<Item> Items { get; set; }
+    
+    public DbSet<RealmEyeAccount> RealmEyeAccounts { get; set; }
     // public DbSet<PlayerItemList> PlayerItemLists { get; set; }
 }

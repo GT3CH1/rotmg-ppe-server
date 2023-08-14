@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using rotmg_ppe_server.data;
 
@@ -10,9 +11,11 @@ using rotmg_ppe_server.data;
 namespace rotmg_ppe_server.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230814000432_AddRealmEyePlayerToDb")]
+    partial class AddRealmEyePlayerToDb
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,16 +89,15 @@ namespace rotmg_ppe_server.Migrations
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("AccountName")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int?>("PlayerId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("VerificationCode")
+                        .IsRequired()
                         .HasColumnType("TEXT");
-
-                    b.Property<bool>("Verified")
-                        .HasColumnType("INTEGER");
 
                     b.HasKey("Id");
 
