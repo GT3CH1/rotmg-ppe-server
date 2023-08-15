@@ -111,7 +111,8 @@ namespace rotmg_ppe_server.controllers
             {
                 var existingUser = _context.RealmEyeAccounts.FirstOrDefault(r => r.AccountName == username);
                 if (existingUser != null)
-                    return BadRequest(new { success = false, message = $"Player {username} already verified.", verified = true });
+                    return BadRequest(new
+                        { success = false, message = $"Player {username} already verified.", verified = true });
             }
 
             // fetch `http://realmeye.com/player/{name}` and check if the verification code is in the page
@@ -131,7 +132,7 @@ namespace rotmg_ppe_server.controllers
                     realmEyeUser.VerificationCode = pendingRealmEyeUser.VerificationCode;
                     await _context.RealmEyeAccounts.AddAsync(realmEyeUser);
                     await _context.SaveChangesAsync();
-                    return Ok(new { success = true, message = $"Player {discordId} verified." });
+                    return Ok(new { success = true, message = $"Player {username} verified.", username = username });
                 }
             }
 
