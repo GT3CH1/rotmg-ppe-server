@@ -32,7 +32,7 @@ namespace rotmg_ppe_server.controllers
                 {
                     success = true, verified = false,
                     message = $"Player {pendingPlayer.AccountName} has not finished verification.",
-                    verificationCode = pendingPlayer.VerificationCode, userName = pendingPlayer.AccountName
+                    verificationCode = pendingPlayer.VerificationCode, username = pendingPlayer.AccountName
                 });
             }
 
@@ -131,6 +131,7 @@ namespace rotmg_ppe_server.controllers
                     realmEyeUser.DiscordId = pendingRealmEyeUser.DiscordId;
                     realmEyeUser.VerificationCode = pendingRealmEyeUser.VerificationCode;
                     await _context.RealmEyeAccounts.AddAsync(realmEyeUser);
+                    _context.PendingRealmEyeUsers.Remove(pendingRealmEyeUser);
                     await _context.SaveChangesAsync();
                     return Ok(new { success = true, message = $"Player {username} verified.", username = username });
                 }
