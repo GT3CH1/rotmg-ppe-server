@@ -46,7 +46,7 @@ namespace rotmg_ppe_server.controllers
             var player = await _context.Players.FirstOrDefaultAsync(p => p.Name == playerName);
             if (player == null)
             {
-                return NotFound(new { success = false, message = $"Player {playerName} not found." });
+                return NotFound(new { success = false, message = $"Player {playerName} not found.", verified = false });
             }
 
             var pendingPlayer = _context.PendingRealmEyeUsers.FirstOrDefault(p => p.AccountName == player.Name);
