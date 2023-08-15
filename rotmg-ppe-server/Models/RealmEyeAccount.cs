@@ -39,7 +39,7 @@ public class RealmEyeAccount
     public bool Verified { get; set; }
 
     [JsonProperty(PropertyName = "discordId")]
-    public int? DiscordId { get; set; }
+    public string? DiscordId { get; set; }
 
     public virtual Player? Player { get; set; }
 }

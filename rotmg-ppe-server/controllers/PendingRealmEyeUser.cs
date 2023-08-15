@@ -27,7 +27,7 @@ namespace rotmg_ppe_server.controllers;
 public class PendingRealmEyeUser
 {
     [JsonProperty(PropertyName = "discordId")]
-    public int? DiscordId { get; set; }
+    public string? DiscordId { get; set; }
 
     [JsonProperty(PropertyName = "accountName")]
     public string? AccountName { get; set; }
