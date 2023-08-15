@@ -106,12 +106,12 @@ namespace rotmg_ppe_server.controllers
         {
             var pendingRealmEyeUser = _context.PendingRealmEyeUsers.FirstOrDefault(r => r.DiscordId == discordId);
             if (pendingRealmEyeUser == null)
-                return NotFound(new { success = false, message = $"Player {discordId} not found." });
+                return NotFound(new { success = false, message = $"Player {discordId} not found.", verified = false });
             else
             {
                 var existingUser = _context.RealmEyeAccounts.FirstOrDefault(r => r.AccountName == username);
                 if (existingUser != null)
-                    return BadRequest(new { success = false, message = $"Player {username} already verified." });
+                    return BadRequest(new { success = false, message = $"Player {username} already verified.", verified = true });
             }
 
             // fetch `http://realmeye.com/player/{name}` and check if the verification code is in the page
