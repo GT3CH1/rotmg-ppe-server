@@ -112,7 +112,7 @@ namespace rotmg_ppe_server.controllers
                 var existingUser = _context.RealmEyeAccounts.FirstOrDefault(r => r.AccountName == username);
                 if (existingUser != null)
                     return BadRequest(new
-                        { success = false, message = $"Player {username} already verified.", verified = true });
+                        { success = false, message = $"Player {username} already verified.", verified = true, username=username });
             }
 
             // fetch `http://realmeye.com/player/{name}` and check if the verification code is in the page
