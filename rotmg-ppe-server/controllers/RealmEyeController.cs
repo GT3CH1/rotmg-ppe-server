@@ -83,13 +83,14 @@ namespace rotmg_ppe_server.controllers
                 return BadRequest(new
                 {
                     success = false, message = "Player has already started verification.",
-                    verificationCode = player.VerificationCode
+                    verificationCode = player.VerificationCode,
+                    verified = false
                 });
             var alreadyVerified = _context.RealmEyeAccounts.FirstOrDefault(r => r.DiscordId == discordId);
             if (alreadyVerified != null)
                 return BadRequest(new
                 {
-                    success = false, message = "Player already verified."
+                    success = false, message = "Player already verified.", verified = true
                 });
 
             var realmEyeAccount = new PendingRealmEyeUser();
@@ -98,7 +99,7 @@ namespace rotmg_ppe_server.controllers
             realmEyeAccount.DiscordId = discordId;
             await _context.PendingRealmEyeUsers.AddAsync(realmEyeAccount);
             await _context.SaveChangesAsync();
-            return Ok(new { success = true, verificationCode = realmEyeAccount.VerificationCode });
+            return Ok(new { success = true, verificationCode = realmEyeAccount.VerificationCode, verified = false });
         }
 
         [HttpPost("player/{discordId}/{username}/verify")]
@@ -112,7 +113,10 @@ namespace rotmg_ppe_server.controllers
                 var existingUser = _context.RealmEyeAccounts.FirstOrDefault(r => r.AccountName == username);
                 if (existingUser != null)
                     return BadRequest(new
-                        { success = false, message = $"Player {username} already verified.", verified = true, username=username });
+                    {
+                        success = false, message = $"Player {username} already verified.", verified = true,
+                        username = username
+                    });
             }
 
             // fetch `http://realmeye.com/player/{name}` and check if the verification code is in the page
