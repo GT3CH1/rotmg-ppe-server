@@ -28,15 +28,6 @@ namespace rotmg_ppe_server.controllers
             var pendingPlayer = _context.PendingRealmEyeUsers.FirstOrDefault(p => p.DiscordId == discordId);
             if (pendingPlayer != null)
             {
-                var verifiedPlayer = _context.RealmEyeAccounts.FirstOrDefault(r => r.DiscordId == discordId);
-                if (verifiedPlayer != null)
-                {
-                    return Ok(new
-                    {
-                        success = true, verified = true, message = $"Player {verifiedPlayer.AccountName} is verified.",
-                        username = verifiedPlayer.AccountName
-                    });
-                }
                 return Ok(new
                 {
                     success = true, verified = false,
@@ -45,6 +36,15 @@ namespace rotmg_ppe_server.controllers
                 });
             }
 
+            var verifiedPlayer = _context.RealmEyeAccounts.FirstOrDefault(r => r.DiscordId == discordId);
+            if (verifiedPlayer != null)
+            {
+                return Ok(new
+                {
+                    success = true, verified = true, message = $"Player {verifiedPlayer.AccountName} is verified.",
+                    username = verifiedPlayer.AccountName
+                });
+            }
 
             return Ok(new { success = false, verified = false, message = "User has not started verification." });
         }
