@@ -22,95 +22,166 @@ namespace rotmg_ppe_server.controllers
             _context = context;
         }
 
-        [HttpGet("player/discord/{discordId}")]
-        public async Task<IActionResult> GetUserStatus(string discordId)
+        /**
+         * Checks whether or not there are any pending verification requests for a given Discord ID.
+         */
+        [HttpGet("player/pending/{discordId}")]
+        public async Task<IActionResult> CheckPendingUserStatus(string discordId)
         {
             var pendingPlayer = _context.PendingRealmEyeUsers.FirstOrDefault(p => p.DiscordId == discordId);
+            // if there is a pending request for the discord id
             if (pendingPlayer != null)
             {
-                return Ok(new
+                return Ok(new RealmEyeVerificationMessage
                 {
-                    success = true, verified = false,
-                    message = $"Player {pendingPlayer.AccountName} has not finished verification.",
-                    verificationCode = pendingPlayer.VerificationCode, username = pendingPlayer.AccountName
+                    Success = true,
+                    Verified = false,
+                    Message = $"Player {pendingPlayer.AccountName} has not finished verification.",
+                    VerificationCode = pendingPlayer.VerificationCode,
+                    Username = pendingPlayer.AccountName
                 });
             }
 
-            var verifiedPlayer = _context.RealmEyeAccounts.FirstOrDefault(r => r.DiscordId == discordId);
-            if (verifiedPlayer != null)
+            // if the discord id does not have any pending requests
+            return Ok(new RealmEyeVerificationMessage
             {
-                return Ok(new
+                Success = false,
+                Verified = false,
+                Message = $"User with Discord ID {discordId} has not started any verification.",
+                Username = null,
+                VerificationCode = null
+            });
+        }
+
+        /**
+         * Deletes a pending verification request for a given Discord ID.
+         */
+        [HttpDelete("player/pending/{discordId}")]
+        public async Task<IActionResult> DeletePendingUser(string discordId)
+        {
+            // check if there is a pending request for the discord id
+            var pendingPlayer = _context.PendingRealmEyeUsers.FirstOrDefault(p => p.DiscordId == discordId);
+            if (pendingPlayer == null)
+            {
+                return NotFound(new RealmEyeVerificationMessage
                 {
-                    success = true, verified = true, message = $"Player {verifiedPlayer.AccountName} is verified.",
-                    username = verifiedPlayer.AccountName
+                    Success = false,
+                    Verified = false,
+                    Message = $"User with Discord ID {discordId} has not started any verification.",
+                    Username = null,
+                    VerificationCode = null
                 });
             }
 
-            return Ok(new { success = false, verified = false, message = "User has not started verification." });
+            // if there is a pending request, delete it
+            _context.PendingRealmEyeUsers.Remove(pendingPlayer);
+            await _context.SaveChangesAsync();
+            return Ok(new RealmEyeVerificationMessage
+            {
+                Success = true,
+                Verified = false,
+                Message = $"User with Discord ID {discordId} has been removed from the pending verification list.",
+                Username = null,
+                VerificationCode = null
+            });
         }
+
 
         [HttpGet("player/{playerName}")]
         public async Task<IActionResult> GetPlayerStatus(string playerName)
         {
-            var player = await _context.Players.FirstOrDefaultAsync(p => p.Name == playerName);
-            if (player == null)
-            {
-                return NotFound(new { success = false, message = $"Player {playerName} not found.", verified = false });
-            }
-
-            var pendingPlayer = _context.PendingRealmEyeUsers.FirstOrDefault(p => p.AccountName == player.Name);
+            var pendingPlayer =
+                await _context.PendingRealmEyeUsers.FirstOrDefaultAsync(p => p.AccountName == playerName);
             if (pendingPlayer != null)
             {
-                return Ok(new
+                return Ok(new RealmEyeVerificationMessage
                 {
-                    success = false, verified = false, message = $"Player {playerName} has not finished verification.",
-                    verificationCode = pendingPlayer.VerificationCode, discordId = pendingPlayer.DiscordId
+                    Success = true,
+                    Verified = false,
+                    Message = $"{playerName} is pending verification.",
+                    VerificationCode = pendingPlayer.VerificationCode,
+                    DiscordId = pendingPlayer.DiscordId,
+                    Username = pendingPlayer.AccountName,
+                    PendingVerification = true
                 });
             }
 
-            var realmEyePlayer = _context.RealmEyeAccounts.FirstOrDefault(r => r.AccountName == player.Name);
+            var realmEyePlayer = await _context.RealmEyeAccounts.FirstOrDefaultAsync(r => r.AccountName == playerName);
             if (realmEyePlayer == null)
             {
-                return BadRequest(new
+                return BadRequest(new RealmEyeVerificationMessage
                 {
-                    success = false, verified = false, message = $"Player {playerName} has not started verification."
+                    Success = false,
+                    Verified = false,
+                    Message = $"{playerName} has not started any verification."
                 });
             }
 
-            return Ok(new
+            return Ok(new RealmEyeVerificationMessage
             {
-                success = true, verified = realmEyePlayer.Verified, discordId = realmEyePlayer.DiscordId,
-                username = realmEyePlayer.AccountName
+                Success = true,
+                Verified = realmEyePlayer.Verified,
+                Message = $"{playerName} has been verified.",
+                DiscordId = realmEyePlayer.DiscordId,
+                Username = realmEyePlayer.AccountName,
+                VerificationCode = realmEyePlayer.VerificationCode,
+                PendingVerification = false
             });
         }
 
+        /**
+         * Starts the verification process for a given player.
+         */
         [HttpPost("player/discord/{discordId}/{username}")]
         public async Task<IActionResult> StartVerification(string discordId, string username)
         {
             var player = _context.PendingRealmEyeUsers.FirstOrDefault(p => p.DiscordId == discordId);
             if (player != null)
-                return BadRequest(new
+                return BadRequest(new RealmEyeVerificationMessage
                 {
-                    success = false, message = "Player has already started verification.",
-                    verificationCode = player.VerificationCode,
-                    verified = false
+                    Message = "Player has already started verification.",
+                    VerificationCode = player.VerificationCode,
+                    Verified = false,
+                    Success = false,
+                    PendingVerification = true
                 });
             var alreadyVerified = _context.RealmEyeAccounts.FirstOrDefault(r => r.DiscordId == discordId);
             if (alreadyVerified != null)
-                return BadRequest(new
-                {
-                    success = false, message = "Player already verified.", verified = true
-                });
+                return BadRequest(
+                    // success = false, message = "Player already verified.", verified = true
+                    new RealmEyeVerificationMessage
+                    {
+                        Success = true,
+                        Message = "Player already verified.",
+                        Verified = true,
+                        Username = alreadyVerified.AccountName,
+                        VerificationCode = alreadyVerified.VerificationCode,
+                        PendingVerification = false
+                    });
 
             var realmEyeAccount = new PendingRealmEyeUser();
             realmEyeAccount.VerificationCode = GenerateVerificationCode();
             realmEyeAccount.AccountName = username;
             realmEyeAccount.DiscordId = discordId;
+
             await _context.PendingRealmEyeUsers.AddAsync(realmEyeAccount);
             await _context.SaveChangesAsync();
-            return Ok(new { success = true, verificationCode = realmEyeAccount.VerificationCode, verified = false });
+
+            return Ok(new RealmEyeVerificationMessage
+            {
+                Success = true,
+                Verified = false,
+                Message = "Verification started.",
+                VerificationCode = realmEyeAccount.VerificationCode,
+                Username = realmEyeAccount.AccountName,
+                PendingVerification = true,
+                DiscordId = discordId
+            });
         }
 
+        /**
+         * Downloads the player's RealmEye page and checks if the verification code is in the page.
+         */
         [HttpPost("player/{discordId}/{username}/verify")]
         public async Task<IActionResult> Verify(string discordId, string username)
         {
@@ -121,10 +192,18 @@ namespace rotmg_ppe_server.controllers
             {
                 var existingUser = _context.RealmEyeAccounts.FirstOrDefault(r => r.AccountName == username);
                 if (existingUser != null)
-                    return BadRequest(new
+                    // return BadRequest(new
+                    // {
+                    //     success = false, message = $"Player {username} already verified.", verified = true,
+                    //     username = username
+                    // });
+                    return Ok(new RealmEyeVerificationMessage
                     {
-                        success = false, message = $"Player {username} already verified.", verified = true,
-                        username = username
+                        Success = false,
+                        Message = $"{username} is already verified.",
+                        Verified = true,
+                        Username = username,
+                        PendingVerification = false
                     });
             }
 
@@ -146,12 +225,28 @@ namespace rotmg_ppe_server.controllers
                     await _context.RealmEyeAccounts.AddAsync(realmEyeUser);
                     _context.PendingRealmEyeUsers.Remove(pendingRealmEyeUser);
                     await _context.SaveChangesAsync();
-                    return Ok(new { success = true, message = $"Player {username} verified.", username = username });
+                    return Ok(new RealmEyeVerificationMessage
+                    {
+                        Success = true,
+                        Message = $"{username} verified.",
+                        Verified = true,
+                        Username = username,
+                        PendingVerification = false,
+                        DiscordId = pendingRealmEyeUser.DiscordId
+                    });
                 }
             }
 
-            return BadRequest(new
-                { success = false, message = $"Verification code {verificationCode} not found in RealmEye page." });
+            return Ok(new RealmEyeVerificationMessage
+            {
+                Success = false,
+                Verified = false,
+                PendingVerification = true,
+                Message = $"Verification code {verificationCode} not found in RealmEye page.",
+                DiscordId = pendingRealmEyeUser.DiscordId,
+                Username = pendingRealmEyeUser.AccountName,
+                VerificationCode = pendingRealmEyeUser.VerificationCode
+            });
         }
 
         [HttpGet("verified")]
@@ -166,13 +261,10 @@ namespace rotmg_ppe_server.controllers
         private static string GenerateVerificationCode()
         {
             var random = new Random();
-            var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_+=-";
+            var chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
             var code = "";
             for (var i = 0; i < 10; i++)
-            {
                 code += chars[random.Next(chars.Length)];
-            }
-
             return code;
         }
     }
