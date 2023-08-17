@@ -41,4 +41,8 @@ public class RealmEyeAccount
 
     [JsonProperty(PropertyName = "discordId")]
     public string? DiscordId { get; set; }
+    
+    public RealmEyeAccount()
+    {
+    }
 }
