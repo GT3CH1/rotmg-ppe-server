@@ -257,6 +257,30 @@ namespace rotmg_ppe_server.controllers
             });
         }
 
+        [HttpPost("player/{discordId}/{username}/forceverify")]
+        public async Task<IActionResult> ForceVerify(string discordId, string username)
+        {
+            var player = new RealmEyeAccount
+            {
+                VerificationCode = GenerateVerificationCode(),
+                DiscordId = discordId,
+                AccountName = username,
+                Verified = true
+            };
+            await _context.RealmEyeAccounts.AddAsync(player);
+            await _context.SaveChangesAsync();
+            return Ok(new RealmEyeVerificationMessage
+            {
+                Success = true,
+                Verified = true,
+                PendingVerification = false,
+                Message = $"{username} verified.",
+                DiscordId = discordId,
+                Username = username,
+                VerificationCode = player.VerificationCode
+            });
+        }
+        
         [HttpGet("verified")]
         public async Task<IActionResult> GetAllPlayers()
         {
