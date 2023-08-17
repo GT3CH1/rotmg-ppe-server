@@ -225,6 +225,8 @@ namespace rotmg_ppe_server.controllers
                 var html = await response.Content.ReadAsStringAsync();
                 if (html.Contains(verificationCode))
                 {
+                    existingUser = _context.RealmEyeAccounts.FirstOrDefault(r =>
+                        r.AccountName == username && r.DiscordId == discordId && !r.Verified);
                     existingUser.AccountName = username;
                     existingUser.Verified = true;
                     existingUser.DiscordId = pendingRealmEyeUser.DiscordId;
