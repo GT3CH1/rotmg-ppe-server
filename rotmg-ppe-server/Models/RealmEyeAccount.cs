@@ -26,10 +26,6 @@ namespace rotmg_ppe_server.models;
 [PrimaryKey(nameof(DiscordId), nameof(AccountName))]
 public class RealmEyeAccount
 {
-    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    [JsonProperty(PropertyName = "id")]
-    public int Id { get; set; }
-
     [JsonProperty(PropertyName = "accountName")]
     public string? AccountName { get; set; }
 
