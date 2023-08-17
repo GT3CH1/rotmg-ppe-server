@@ -260,6 +260,17 @@ namespace rotmg_ppe_server.controllers
         [HttpPost("player/{discordId}/{username}/forceverify")]
         public async Task<IActionResult> ForceVerify(string discordId, string username)
         {
+
+            if (await _context.RealmEyeAccounts.AnyAsync(p => p.AccountName == username && p.DiscordId == discordId))
+            {
+                return Ok(new RealmEyeVerificationMessage
+                {
+                    Success = true,
+                    Verified = true,
+                    Message = "Player already exists."
+                });
+            }
+            
             var player = new RealmEyeAccount
             {
                 VerificationCode = GenerateVerificationCode(),
