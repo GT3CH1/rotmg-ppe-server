@@ -18,13 +18,14 @@
 
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
 namespace rotmg_ppe_server.models;
 
+[PrimaryKey(nameof(DiscordId), nameof(AccountName))]
 public class RealmEyeAccount
 {
-    [Key]
     [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     [JsonProperty(PropertyName = "id")]
     public int Id { get; set; }
@@ -40,6 +41,4 @@ public class RealmEyeAccount
 
     [JsonProperty(PropertyName = "discordId")]
     public string? DiscordId { get; set; }
-
-    public virtual Player? Player { get; set; }
 }
