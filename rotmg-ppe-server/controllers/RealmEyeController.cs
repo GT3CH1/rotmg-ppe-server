@@ -139,13 +139,13 @@ namespace rotmg_ppe_server.controllers
             var player = _context.RealmEyeAccounts.FirstOrDefault(p =>
                 p.DiscordId == discordId && p.AccountName == username && !p.Verified);
             if (player != null)
-                return BadRequest(new RealmEyeVerificationMessage
+                return Ok(new RealmEyeVerificationMessage
                 {
                     Message = "Player has already started verification.",
                     VerificationCode = player.VerificationCode,
                     Verified = false,
                     Success = false,
-                    PendingVerification = true
+                    PendingVerification = true,
                 });
 
             player = _context.RealmEyeAccounts.FirstOrDefault(r =>
@@ -186,6 +186,7 @@ namespace rotmg_ppe_server.controllers
 
         /**
          * Downloads the player's RealmEye page and checks if the verification code is in the page.
+         * player/231251672486117376/ZuccheroX/verify
          */
         [HttpPost("player/{discordId}/{username}/verify")]
         public async Task<IActionResult> Verify(string discordId, string username)
@@ -224,12 +225,11 @@ namespace rotmg_ppe_server.controllers
                 var html = await response.Content.ReadAsStringAsync();
                 if (html.Contains(verificationCode))
                 {
-                    var realmEyeUser = new RealmEyeAccount();
-                    realmEyeUser.AccountName = username;
-                    realmEyeUser.Verified = true;
-                    realmEyeUser.DiscordId = pendingRealmEyeUser.DiscordId;
-                    realmEyeUser.VerificationCode = pendingRealmEyeUser.VerificationCode;
-                    await _context.RealmEyeAccounts.AddAsync(realmEyeUser);
+                    existingUser.AccountName = username;
+                    existingUser.Verified = true;
+                    existingUser.DiscordId = pendingRealmEyeUser.DiscordId;
+                    existingUser.VerificationCode = pendingRealmEyeUser.VerificationCode;
+                    _context.RealmEyeAccounts.Update(existingUser);
                     await _context.SaveChangesAsync();
                     return Ok(new RealmEyeVerificationMessage
                     {
